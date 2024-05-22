@@ -1,21 +1,18 @@
 ---
-title: "Plotly examples"
+title: "Dashboard"
 output: 
-  html_document:
-    toc: true
-    toc_float: true
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
 ---
 
-# Examples of plotly
-
-We're gonna look at NYC Airbnb data.
-
-# Loading data
-
-```{r}
+```{r setup, include=FALSE}
 library(tidyverse)
 library(p8105.datasets)
 library(plotly)
+
+library(flexdashboard)
 ```
 
 ```{r}
@@ -33,11 +30,10 @@ nyc_airbnb =
     price %in% 100:500) 
 ```
 
- price %in% 100:500): price in the range of 100 to 500.
- 
-# Plotly plots
- 
-## scatterplot
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
 
 ```{r}
 nyc_airbnb %>% 
@@ -48,14 +44,10 @@ nyc_airbnb %>%
           type = "scatter", mode = "markers")
 ```
 
-plot_ly: graphing
-mode = "markers": This displays each data point as a distinct marker.
-mode = "lines": This connects the data points with lines.
-mode = "lines+markers": This combines both lines and markers, showing the individual data points and connecting them with lines.
-text =~rating: when you put mouse at one point, it will show x, y and rating.
-text = ~text_label: show the text_label we defined
+Column {data-width=350}
+-----------------------------------------------------------------------
 
-## boxplot
+### Chart B
 
 ```{r}
 nyc_airbnb  %>%  
@@ -64,9 +56,8 @@ nyc_airbnb  %>%
     y = ~price, x = ~ neighbourhood, color = ~neighbourhood, type = "box", colors = "viridis")
 ```
 
-fct_reorder(neighbourhood, price): reorder neighbourhood according to price
+### Chart C
 
-## bar plot
 ```{r}
 nyc_airbnb  %>%  
   count(neighbourhood) %>% 
@@ -74,16 +65,5 @@ nyc_airbnb  %>%
   plot_ly(
     x = ~neighbourhood, y = ~n, color = ~neighbourhood, 
     type = "bar", colors = "viridis")
-```
-
-# ggplotly
-
-```{r}
-gg_scatter = 
-nyc_airbnb  %>%  
-  ggplot(aes(x = lat, y = long, color = price)) +
-  geom_point()
-
-ggplotly(gg_scatter)
 ```
 
